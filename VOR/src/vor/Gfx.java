@@ -9,11 +9,18 @@ import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 
+/**
+ * Encapsulates a {@link Graphics2D} object for chained convenience drawing methods.
+ * One should always call Gfx.create() first with an associated {@link Graphics} object.
+ * After all drawing is complete, call flush().
+ * 
+ * @author William
+ */
 public class Gfx {
 	
 	Graphics2D g2d;
 	
-	public Gfx(Graphics g) {
+	private Gfx(Graphics g) {
 		this.g2d = (Graphics2D) g.create();
 	}
 
@@ -22,7 +29,10 @@ public class Gfx {
 	}
 	
 	public Gfx drawImage(ImageObserver context, String key, int x, int y) {
-		g2d.drawImage(Resources.image(key), x, y, context);
+		BufferedImage image = Resources.image(key);
+		if (image != null) {
+			g2d.drawImage(image, x, y, context);
+		}
 		return this;
 	}
 	

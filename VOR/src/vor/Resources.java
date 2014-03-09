@@ -6,6 +6,11 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
+/**
+ * Maintains static HashMaps of various resources, accessible by String key.
+ * 
+ * @author William
+ */
 public class Resources {
 	private static HashMap<String, BufferedImage> images = new HashMap<>();
 	

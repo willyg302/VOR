@@ -7,12 +7,24 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 
+/**
+ * Main class for VOR, manages link between radio and display.
+ * It is here that relevant calculations are done by taking information
+ * from the radio and routing it to the display.
+ * 
+ * @author William
+ */
 public class VOR {
 	public static final String APP_NAME = "VOR";
 	public static final String VERSION = "1.0";
-	public JFrame frame;
+	
+	private JFrame frame;
+	
+	private Radio radio;
 
 	public VOR() {
+		// Simulated radio
+		radio = new Radio();
 
 		// Make actual frame
 		frame = new JFrame(APP_NAME);
