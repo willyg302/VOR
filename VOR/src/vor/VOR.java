@@ -1,6 +1,7 @@
 package vor;
 
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -35,6 +36,10 @@ public class VOR {
 	}
 
 	public static void main(String[] args) {
-		new VOR();
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				new VOR();
+			}
+		});
 	}
 }
