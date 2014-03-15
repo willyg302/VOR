@@ -20,12 +20,12 @@ package vor;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JPanel;
 
-public class Display extends JPanel implements ActionListener {
+public abstract class Display extends JPanel implements KeyListener {
 
 	private static final long serialVersionUID = 1L;
 
@@ -37,11 +37,16 @@ public class Display extends JPanel implements ActionListener {
 		obsDegrees = 0;
 		wheelDegrees = 0;
 		needleDegrees = 0;
+		
 		Resources.loadImage("base");
 		Resources.loadImage("obs");
 		Resources.loadImage("wheel");
 		Resources.loadImage("to");
 		Resources.loadImage("from");
+		
+		addKeyListener(this);
+		setFocusable(true);
+		requestFocusInWindow();
 	}
 
 	@Override
@@ -60,12 +65,6 @@ public class Display extends JPanel implements ActionListener {
 				.drawRay(256, 128, 257, 90 + (5 * needleDegrees / 2), 6,
 						Color.WHITE).flush();
 	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-
-	}
 	
 	private double fixDegrees(double degrees, int fix) {
 		degrees += fix;
@@ -82,4 +81,35 @@ public class Display extends JPanel implements ActionListener {
 		obsDegrees = fixDegrees(obsDegrees, 3 * degrees);
 		repaint();
 	}
+	
+	public void refresh(int desired, int needle) {
+		wheelDegrees = desired;
+		obsDegrees = (3 * desired) % 360;
+		needleDegrees = needle;
+		repaint();
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		int key = e.getKeyCode();
+		if (key == KeyEvent.VK_LEFT) {
+			onRotateOBS(-1);
+		} else if (key == KeyEvent.VK_RIGHT) {
+			onRotateOBS(1);
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public abstract void onRotateOBS(int delta);
 }

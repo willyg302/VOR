@@ -22,7 +22,6 @@ import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -53,29 +52,53 @@ public class VOR {
 
 	private Radio radio;
 	private Display display;
+	
+	private int desired;
 
 	public VOR() {
 		// Simulated radio
 		radio = new Radio();
 
 		// Our GUI
-		display = new Display();
-		display.addKeyListener(new KeyAdapter() {
-			public void keyPressed(KeyEvent e) {
-				int key = e.getKeyCode();
-				if (key == KeyEvent.VK_LEFT) {
-					display.swingWheel(1);
-				} else if (key == KeyEvent.VK_RIGHT) {
-					display.swingWheel(-1);
-				}
+		display = new Display() {
+			private static final long serialVersionUID = 1L;
+
+			public void onRotateOBS(int delta) {
+				rotateOBS(delta);
 			}
-		});
-		display.setFocusable(true);
-		display.requestFocusInWindow();
+		};
+		
+		desired = 0;
+		
+		
 
 		// Make actual frame
 		initializeFrame();
 	}
+	
+	/**
+	 * needleDegrees is obs - intercepted radial
+	 * For example, if we say we want 30 deg TO (210 FROM), and the intercepted radial FROM the station is 221,
+	 * then our needleDegrees = 210 - 221 = -11.
+	 * 
+	 * TO/FROM
+	 * 
+	 * The intercepted radial is the ray FROM the station. So if our OBS is within 90 deg to either side of this
+	 * value, we are FROM. Otherwise, we are TO.
+	 */
+	
+	private void rotateOBS(int delta) {
+		int intercepted = radio.getRadial();
+		
+		desired = Utils.clampDegrees(desired + delta);
+		int needle = Utils.clamp(Utils.arc(desired, intercepted), -10, 10);
+		
+		// System.out.println(desired + " " + intercepted + " " + needle);
+		
+		// Oddly, Swing rotates components opposite of our display rotation, so we need to do 360 - desired here
+		display.refresh(360 - desired, needle);
+	}
+	
 
 	private void initializeFrame() {
 		frame = new JFrame(APP_NAME);
