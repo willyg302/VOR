@@ -1,3 +1,20 @@
+/**
+ * VHF Omnidirectional Range simulator in Java
+ * Copyright (C) 2014  William Gaul, David Do, Landon Soriano
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package vor;
 
 import java.awt.Color;
@@ -47,9 +64,9 @@ public class VOR {
 			public void keyPressed(KeyEvent e) {
 				int key = e.getKeyCode();
 				if (key == KeyEvent.VK_LEFT) {
-					display.swingWheel(-1);
-				} else if (key == KeyEvent.VK_RIGHT) {
 					display.swingWheel(1);
+				} else if (key == KeyEvent.VK_RIGHT) {
+					display.swingWheel(-1);
 				}
 			}
 		});
@@ -118,7 +135,7 @@ public class VOR {
 			textPane.setContentType("text/html");
 			textPane.setText("<body style=\"font-family: arial\">"
 					+ String.format("<h1>%s %s</h1>", APP_NAME, VERSION)
-					+ "A VHF omnidirectional range simulator created for ICS 314<br>"
+					+ "A VHF Omnidirectional Range simulator created for ICS 314<br>"
 					+ "by William Gaul, David Do, &amp; Landon Soriano.<br>"
 					+ "<h2>Directions:</h2>"
 					+ "Coming soon!"
