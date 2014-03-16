@@ -29,20 +29,17 @@ public abstract class Display extends JPanel implements KeyListener {
 
 	private static final long serialVersionUID = 1L;
 
-	private boolean to;
+	private boolean to, good;
 	private double obsDegrees, wheelDegrees, needleDegrees;
 
 	public Display() {
 		to = true;
+		good = true;
 		obsDegrees = 0;
 		wheelDegrees = 0;
 		needleDegrees = 0;
 		
-		Resources.loadImage("base");
-		Resources.loadImage("obs");
-		Resources.loadImage("wheel");
-		Resources.loadImage("to");
-		Resources.loadImage("from");
+		Resources.loadImages(new String[] {"base", "obs", "wheel", "to", "from", "good", "bad"});
 		
 		addKeyListener(this);
 		setFocusable(true);
@@ -61,7 +58,8 @@ public abstract class Display extends JPanel implements KeyListener {
 				.drawImage(this, "base", 0, 0)
 				.drawImageRotated(this, "obs", 7, 406, obsDegrees)
 				.drawImageRotated(this, "wheel", 0, 0, wheelDegrees)
-				.drawImage(this, to ? "to" : "from", 305, 232)
+				.drawImage(this, to ? "to" : "from", 305, 235)
+				.drawImage(this, good ? "good" : "bad", 160, 245)
 				.drawRay(256, 128, 257, 90 + (5 * needleDegrees / 2), 6,
 						Color.WHITE).flush();
 	}

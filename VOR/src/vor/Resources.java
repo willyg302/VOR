@@ -47,6 +47,20 @@ public class Resources {
 			return false;
 		}
 	}
+	
+	/**
+	 * Attempts to load multiple images as specified by the given String array.
+	 * 
+	 * @param keys Filenames to load, and keys to store the images with
+	 * @return A boolean array indicating whether each load was successful
+	 */
+	public static boolean[] loadImages(String[] keys) {
+		boolean[] success = new boolean[keys.length];
+		for (int i = 0; i < keys.length; i++) {
+			success[i] = loadImage(keys[i]);
+		}
+		return success;
+	}
 
 	/**
 	 * TODO Should this call loadImage() if image is not initially present?
