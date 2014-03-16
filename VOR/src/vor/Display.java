@@ -66,22 +66,6 @@ public abstract class Display extends JPanel implements KeyListener {
 						Color.WHITE).flush();
 	}
 	
-	private double fixDegrees(double degrees, int fix) {
-		degrees += fix;
-		if (degrees < 0) {
-			degrees += 360;
-		} else if (degrees > 359) {
-			degrees -= 360;
-		}
-		return degrees;
-	}
-
-	public void swingWheel(int degrees) {
-		wheelDegrees = fixDegrees(wheelDegrees, degrees);
-		obsDegrees = fixDegrees(obsDegrees, 3 * degrees);
-		repaint();
-	}
-	
 	public void refresh(int desired, int needle) {
 		wheelDegrees = desired;
 		obsDegrees = (3 * desired) % 360;
