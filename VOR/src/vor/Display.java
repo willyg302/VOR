@@ -30,14 +30,10 @@ public abstract class Display extends JPanel implements KeyListener {
 	private static final long serialVersionUID = 1L;
 
 	private boolean to, good;
-	private double obsDegrees, wheelDegrees, needleDegrees;
 
 	public Display() {
 		to = true;
 		good = true;
-		obsDegrees = 0;
-		wheelDegrees = 0;
-		needleDegrees = 0;
 		
 		Resources.loadImages(new String[] {"base", "obs", "wheel", "to", "from", "good", "bad"});
 		
@@ -54,21 +50,19 @@ public abstract class Display extends JPanel implements KeyListener {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		
+		double wheelDegrees = fetchDesiredHeading();
+		double obsDegrees = (3 * wheelDegrees) % 360;
+		double needleDegrees = fetchNeedleAngle();
+		
 		Gfx.create(g)
 				.drawImage(this, "base", 0, 0)
 				.drawImageRotated(this, "obs", 7, 406, obsDegrees)
 				.drawImageRotated(this, "wheel", 0, 0, wheelDegrees)
 				.drawImage(this, to ? "to" : "from", 305, 235)
 				.drawImage(this, good ? "good" : "bad", 160, 245)
-				.drawRay(256, 128, 257, 90 + (5 * needleDegrees / 2), 6,
-						Color.WHITE).flush();
-	}
-	
-	public void refresh(int desired, int needle) {
-		wheelDegrees = desired;
-		obsDegrees = (3 * desired) % 360;
-		needleDegrees = needle;
-		repaint();
+				.drawRay(256, 128, 257, 90 + (5 * needleDegrees / 2), 6, Color.WHITE)
+				.flush();
 	}
 
 	@Override
@@ -94,4 +88,6 @@ public abstract class Display extends JPanel implements KeyListener {
 	}
 	
 	public abstract void onRotateOBS(int delta);
+	public abstract int fetchDesiredHeading();
+	public abstract int fetchNeedleAngle();
 }
