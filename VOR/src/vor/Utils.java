@@ -24,6 +24,9 @@ package vor;
  */
 public class Utils {
 	
+	/**
+	 * Clamps {@code degrees} to the interval [0, 359).
+	 */
 	public static int clampDegrees(int degrees) {
 		if (degrees < 0) {
 			degrees += 360;
@@ -33,13 +36,18 @@ public class Utils {
 		return degrees;
 	}
 	
+	/**
+	 * Clamps {@code val} to the interval [{@code low}, {@code high}].
+	 */
 	public static int clamp(int val, int low, int high) {
 		return Math.max(low, Math.min(high, val));
 	}
 	
-	// TODO This fails miserably on abeam (we should really have an abeam indicator)
+	/**
+	 * Determines the shortest rotation, in degrees, necessary to get from {@code x} to {@code y}.
+	 */
 	public static int arc(int x, int y) {
-		int angle = clampDegrees(x - y);
+		int angle = clampDegrees(y - x);
 		int sign = 1;
 		if (angle > 180) {
 			sign = -1;

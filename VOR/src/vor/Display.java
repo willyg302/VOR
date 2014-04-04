@@ -105,6 +105,6 @@ public class Display extends JPanel implements KeyListener {
 	}
 	
 	public int fetchNeedleAngle() {
-		return -vor.getNeedle();
+		return vor.getNeedle();
 	}
 }

@@ -42,8 +42,8 @@ public class Resources {
 			BufferedImage img = ImageIO.read(Resources.class.getResource("/res/" + key + ".png"));
 			images.put(key, img);
 			return true;
-		} catch (IOException ex) {
-			ex.printStackTrace();
+		} catch (IOException | IllegalArgumentException ex) {
+			//ex.printStackTrace();
 			return false;
 		}
 	}

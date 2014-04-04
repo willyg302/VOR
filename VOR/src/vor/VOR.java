@@ -46,6 +46,8 @@ public class VOR {
 	 * value, we are FROM. Otherwise, we are TO.
 	 */
 	
+	// TODO abeam, good/bad signal
+	
 	public void rotateOBS(int delta) {
 		int intercepted = radio.getRadial();
 		

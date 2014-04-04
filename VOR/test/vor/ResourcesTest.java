@@ -19,29 +19,30 @@ package vor;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
+
 import org.junit.Test;
 
-public class UtilsTest {
+public class ResourcesTest {
 
 	@Test
-	public void testClampDegrees() {
-		assertEquals("Degree in range", 57, Utils.clampDegrees(57));
-		assertEquals("Degree less than 0", 356, Utils.clampDegrees(-4));
-		assertEquals("Degree greater than 360", 4, Utils.clampDegrees(364));
+	public void testLoadImage() {
+		assertTrue("Image exists", Resources.loadImage("base"));
+		assertFalse("Image does not exist", Resources.loadImage("dummy"));
 	}
 	
 	@Test
-	public void testClamp() {
-		assertEquals("Value within interval", 10, Utils.clamp(10, 5, 15));
-		assertEquals("Value below interval", -7, Utils.clamp(-15, -7, 12));
-		assertEquals("Value above interval", 42, Utils.clamp(Integer.MAX_VALUE, 0, 42));
+	public void testLoadImages() {
+		assertTrue("Interspersed good/bad loads", Arrays.equals(
+				new boolean[] {true, false, true},
+				Resources.loadImages(new String[] {"good", "dne", "bad"}
+		)));
 	}
 	
 	@Test
-	public void testArc() {
-		assertEquals("Positive arc", 35, Utils.arc(25, 60));
-		assertEquals("Negative arc", -19, Utils.arc(38, 19));
-		assertEquals("Passing 0", -26, Utils.arc(25, 359));
-		assertEquals("Passing 0", 30, Utils.arc(350, 20));
+	public void testImage() {
+		assertNull("Image not loaded yet", Resources.image("wheel"));
+		Resources.loadImage("wheel");
+		assertNotNull("Image loaded", Resources.image("wheel"));
 	}
 }
