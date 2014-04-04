@@ -53,6 +53,14 @@ public class Gfx {
 		return this;
 	}
 	
+	public Gfx drawImage(ImageObserver context, String key, int x, int y, int sx, int sy, int w, int h) {
+		BufferedImage image = Resources.image(key);
+		if (image != null) {
+			g2d.drawImage(image.getSubimage(sx, sy, w, h), x, y, context);
+		}
+		return this;
+	}
+	
 	public Gfx drawImageRotated(ImageObserver context, String key, int x, int y, double degrees) {
 		BufferedImage image = Resources.image(key);
 		if (image != null) {
@@ -73,6 +81,22 @@ public class Gfx {
 		int a = x + (int) (length * Math.cos(rad));
 		int b = y + (int) (length * Math.sin(rad));
 		g2d.drawLine(x, y, a, b);
+		return this;
+	}
+	
+	public Gfx drawText(ImageObserver context, String font, int x, int y, String text) {
+		BufferedImage f = Resources.image(font);
+		if (f != null) {
+			String fontmap = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+			text = text.toUpperCase();
+			for (int i = 0; i < text.length(); i++) {
+				int token = fontmap.indexOf(text.charAt(i));
+				if (token != -1) {
+					g2d.drawImage(f.getSubimage(token * 25, 0, 25, 41), x, y, context);
+				}
+				x += 31;
+			}
+		}
 		return this;
 	}
 	

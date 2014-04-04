@@ -38,8 +38,7 @@ import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 
 /**
- * Our desktop Java app. Manages references to the application-agnostic VOR
- * and our display classes, and handles ferrying information among them.
+ * Our desktop Java app.
  * 
  * @author William
  */
@@ -49,34 +48,11 @@ public class App {
 
 	private JFrame frame;
 	
-	private VOR vor;
 	private Display display;
 
 	public App() {
-		// Simulated radio
-		vor = new VOR();
-
 		// Our GUI
-		display = new Display() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onRotateOBS(int delta) {
-				vor.rotateOBS(delta);
-				display.repaint();
-			}
-
-			@Override
-			public int fetchDesiredHeading() {
-				// Oddly, Swing rotates components opposite of our display rotation, so we need to do 360 - desired here
-				return 360 - vor.getDesired();
-			}
-
-			@Override
-			public int fetchNeedleAngle() {
-				return vor.getNeedle();
-			}
-		};
+		display = new Display();
 		
 		// Make actual frame
 		initializeFrame();

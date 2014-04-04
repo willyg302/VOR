@@ -54,10 +54,12 @@ public class VOR {
 	}
 	
 	public int getDesired() {
+		//System.out.println(desired);
 		return desired;
 	}
 	
 	public int getNeedle() {
+		//System.out.println(needle);
 		return needle;
 	}
 }

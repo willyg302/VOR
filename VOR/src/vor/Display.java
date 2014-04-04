@@ -25,17 +25,22 @@ import java.awt.event.KeyListener;
 
 import javax.swing.JPanel;
 
-public abstract class Display extends JPanel implements KeyListener {
+public class Display extends JPanel implements KeyListener {
 
 	private static final long serialVersionUID = 1L;
+	
+	private VOR vor;
 
 	private boolean to, good;
 
 	public Display() {
+		
+		vor = new VOR();
+		
 		to = true;
 		good = true;
 		
-		Resources.loadImages(new String[] {"base", "obs", "wheel", "to", "from", "good", "bad"});
+		Resources.loadImages(new String[] {"base", "obs", "wheel", "to", "from", "good", "bad", "font"});
 		
 		addKeyListener(this);
 		setFocusable(true);
@@ -44,7 +49,7 @@ public abstract class Display extends JPanel implements KeyListener {
 
 	@Override
 	public Dimension getPreferredSize() {
-		return new Dimension(512, 512);
+		return new Dimension(512, 576);
 	}
 
 	@Override
@@ -57,11 +62,13 @@ public abstract class Display extends JPanel implements KeyListener {
 		
 		Gfx.create(g)
 				.drawImage(this, "base", 0, 0)
-				.drawImageRotated(this, "obs", 7, 406, obsDegrees)
-				.drawImageRotated(this, "wheel", 0, 0, wheelDegrees)
-				.drawImage(this, to ? "to" : "from", 305, 235)
-				.drawImage(this, good ? "good" : "bad", 160, 245)
-				.drawRay(256, 128, 257, 90 + (5 * needleDegrees / 2), 6, Color.WHITE)
+				.drawImageRotated(this, "obs", 7, 470, obsDegrees)
+				.drawImageRotated(this, "wheel", 0, 64, wheelDegrees)
+				.drawImage(this, to ? "to" : "from", 305, 299)
+				.drawImage(this, good ? "good" : "bad", 160, 309)
+				.drawRay(256, 192, 257, 90 + (5 * needleDegrees / 2), 6, Color.WHITE)
+				.drawText(this, "font", 33, 25, String.format("%03d", 360 - (int)wheelDegrees))
+				.drawText(this, "font", 391, 25, "GWC")
 				.flush();
 	}
 
@@ -87,7 +94,17 @@ public abstract class Display extends JPanel implements KeyListener {
 		
 	}
 	
-	public abstract void onRotateOBS(int delta);
-	public abstract int fetchDesiredHeading();
-	public abstract int fetchNeedleAngle();
+	public void onRotateOBS(int delta) {
+		vor.rotateOBS(delta);
+		this.repaint();
+	}
+	
+	public int fetchDesiredHeading() {
+		// Oddly, Swing rotates components opposite of our display rotation, so we need to do 360 - desired here
+		return 360 - vor.getDesired();
+	}
+	
+	public int fetchNeedleAngle() {
+		return -vor.getNeedle();
+	}
 }
