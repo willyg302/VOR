@@ -25,15 +25,17 @@ package vor;
 public class Utils {
 	
 	/**
-	 * Clamps {@code degrees} to the interval [0, 359).
+	 * Normalizes {@code angle} to the interval [{@code center} - 180, {@code center} + 180).
 	 */
-	public static int clampDegrees(int degrees) {
-		if (degrees < 0) {
-			degrees += 360;
-		} else if (degrees > 359) {
-			degrees -= 360;
-		}
-		return degrees;
+	public static int normalizeAngle(int angle, int center) {
+		return angle - 360 * (int)Math.floor((angle + 180 - center) / 360.0);
+	}
+	
+	/**
+	 * Normalizes {@code angle} to the interval [0, 359).
+	 */
+	public static int normalizeAngle(int angle) {
+		return normalizeAngle(angle, 180);
 	}
 	
 	/**
@@ -47,15 +49,6 @@ public class Utils {
 	 * Determines the shortest rotation, in degrees, necessary to get from {@code x} to {@code y}.
 	 */
 	public static int arc(int x, int y) {
-		int angle = clampDegrees(y - x);
-		int sign = 1;
-		if (angle > 180) {
-			sign = -1;
-			angle %= 180;
-		}
-		if (angle > 90) {
-			angle = 180 - angle;
-		}
-		return sign * angle;
+		return normalizeAngle(y - x, 0);
 	}
 }

@@ -25,43 +25,66 @@ package vor;
 public class VOR {
 	private Radio radio;
 	
-	private int desired, needle;
+	private int desired;
 
 	public VOR() {
 		// Simulated radio
 		radio = new Radio();
 
 		desired = 0;
-		needle = 0;
+	}
+	
+	public void rotateOBS(int delta) {
+		desired = Utils.normalizeAngle(desired + delta);
 	}
 	
 	/**
-	 * needleDegrees is obs - intercepted radial
-	 * For example, if we say we want 30 deg TO (210 FROM), and the intercepted radial FROM the station is 221,
-	 * then our needleDegrees = 210 - 221 = -11.
-	 * 
-	 * TO/FROM
-	 * 
-	 * The intercepted radial is the ray FROM the station. So if our OBS is within 90 deg to either side of this
-	 * value, we are FROM. Otherwise, we are TO.
+	 * @return OBS = Omni Bearing Selector (desired radial)
 	 */
-	
-	// TODO abeam, good/bad signal
-	
-	public void rotateOBS(int delta) {
-		int intercepted = radio.getRadial();
-		
-		desired = Utils.clampDegrees(desired + delta);
-		needle = Utils.clamp(Utils.arc(desired, intercepted), -10, 10);
-	}
-	
-	public int getDesired() {
-		//System.out.println(desired);
+	public int getOBS() {
 		return desired;
 	}
 	
-	public int getNeedle() {
-		//System.out.println(needle);
-		return needle;
+	/**
+	 * @return CDI = Course Deviation Indicator (essentially the needle angle)
+	 */
+	public int getCDI() {
+		int intercepted = radio.getRadial();
+		int arc = Utils.arc(desired, intercepted);
+		if (arc > 90) {
+			arc = 180 - arc;
+		} else if (arc < -90) {
+			arc = -180 - arc;
+		}
+		return Utils.clamp(arc, -10, 10);
+	}
+	
+	/**
+	 * The signal is BAD if it is within 1 degree of being "abeam".
+	 * abeam is defined as 90 degrees to either side of the desired radial.
+	 * TODO The signal is also BAD if the plane is over the station.
+	 * 
+	 * @return true if the signal is good
+	 */
+	public boolean isSignalGood() {
+		int intercepted = radio.getRadial();
+		int arc = Utils.arc(desired, intercepted);
+		return Math.abs(Math.abs(arc) - 90) > 1;
+	}
+	
+	/**
+	 * We are FROM if our desired radial is within 90 degrees of the intercepted radial.
+	 * Otherwise, we are TO.
+	 * 
+	 * @return true if we are heading towards the station
+	 */
+	public boolean isGoingTo() {
+		int intercepted = radio.getRadial();
+		return Math.abs(Utils.arc(desired, intercepted)) > 90;
+	}
+	
+	// TODO this
+	public String getStationID() {
+		return "GWC";
 	}
 }

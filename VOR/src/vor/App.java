@@ -119,7 +119,8 @@ public class App {
 					+ "A VHF Omnidirectional Range simulator created for ICS 314<br>"
 					+ "by William Gaul, David Do, &amp; Landon Soriano.<br>"
 					+ "<h2>Directions:</h2>"
-					+ "Coming soon!"
+					+ "Use the left and right arrow keys to set your desired radial.<br>"
+					+ "More coming soon!"
 					+ "</body>");
 			textPane.setBackground(new Color(0xeeeeee));
 			textPane.setEditable(false);

@@ -31,14 +31,8 @@ public class Display extends JPanel implements KeyListener {
 	
 	private VOR vor;
 
-	private boolean to, good;
-
 	public Display() {
-		
 		vor = new VOR();
-		
-		to = true;
-		good = true;
 		
 		Resources.loadImages(new String[] {"base", "obs", "wheel", "to", "from", "good", "bad", "font"});
 		
@@ -56,26 +50,27 @@ public class Display extends JPanel implements KeyListener {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
-		double wheelDegrees = fetchDesiredHeading();
+		// Oddly, Swing rotates components opposite of our display rotation, so we need to do 360 - desired here
+		double wheelDegrees = 360 - vor.getOBS();
 		double obsDegrees = (3 * wheelDegrees) % 360;
-		double needleDegrees = fetchNeedleAngle();
 		
-		Gfx.create(g)
+		Gfx gfx = Gfx.create(g)
 				.drawImage(this, "base", 0, 0)
 				.drawImageRotated(this, "obs", 7, 470, obsDegrees)
-				.drawImageRotated(this, "wheel", 0, 64, wheelDegrees)
-				.drawImage(this, to ? "to" : "from", 305, 299)
-				.drawImage(this, good ? "good" : "bad", 160, 309)
-				.drawRay(256, 192, 257, 90 + (5 * needleDegrees / 2), 6, Color.WHITE)
-				.drawText(this, "font", 33, 25, String.format("%03d", 360 - (int)wheelDegrees))
-				.drawText(this, "font", 391, 25, "GWC")
+				.drawImageRotated(this, "wheel", 0, 64, wheelDegrees);
+		if (vor.isSignalGood()) {
+			gfx.drawImage(this, vor.isGoingTo() ? "to" : "from", 305, 299);
+		}
+		gfx.drawImage(this, vor.isSignalGood() ? "good" : "bad", 160, 309)
+				.drawRay(256, 192, 257, 90 + (5 * vor.getCDI() / 2), 6, Color.WHITE)
+				.drawText(this, "font", 33, 25, String.format("%03d", vor.getOBS()))
+				.drawText(this, "font", 391, 25, vor.getStationID())
 				.flush();
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
+		//
 	}
 
 	@Override
@@ -90,21 +85,11 @@ public class Display extends JPanel implements KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
+		//
 	}
 	
 	public void onRotateOBS(int delta) {
 		vor.rotateOBS(delta);
 		this.repaint();
-	}
-	
-	public int fetchDesiredHeading() {
-		// Oddly, Swing rotates components opposite of our display rotation, so we need to do 360 - desired here
-		return 360 - vor.getDesired();
-	}
-	
-	public int fetchNeedleAngle() {
-		return vor.getNeedle();
 	}
 }

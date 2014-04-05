@@ -24,10 +24,11 @@ import org.junit.Test;
 public class UtilsTest {
 
 	@Test
-	public void testClampDegrees() {
-		assertEquals("Degree in range", 57, Utils.clampDegrees(57));
-		assertEquals("Degree less than 0", 356, Utils.clampDegrees(-4));
-		assertEquals("Degree greater than 360", 4, Utils.clampDegrees(364));
+	public void testNormalizeAngle() {
+		assertEquals("Degree in range", 57, Utils.normalizeAngle(57));
+		assertEquals("Degree less than 0", 356, Utils.normalizeAngle(-4));
+		assertEquals("Degree greater than 360", 4, Utils.normalizeAngle(364));
+		assertEquals("Custom range", -168, Utils.normalizeAngle(192, 10));
 	}
 	
 	@Test
@@ -43,5 +44,7 @@ public class UtilsTest {
 		assertEquals("Negative arc", -19, Utils.arc(38, 19));
 		assertEquals("Passing 0", -26, Utils.arc(25, 359));
 		assertEquals("Passing 0", 30, Utils.arc(350, 20));
+		assertEquals("Large arc", 176, Utils.arc(24, 200));
+		assertEquals("Large arc overflow", -176, Utils.arc(24, 208));
 	}
 }
