@@ -85,6 +85,6 @@ public class VOR {
 	
 	// TODO this
 	public String getStationID() {
-		return "GWC";
+		return radio.getStationID();
 	}
 }

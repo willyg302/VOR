@@ -25,6 +25,7 @@ public class Radio {
 
 	/* National */public Radio() {
 		this.radial = 0;
+		this.stationID = "XXX";
 	}
 	
 	public int getRadial() {
