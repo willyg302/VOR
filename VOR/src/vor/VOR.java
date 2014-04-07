@@ -83,7 +83,6 @@ public class VOR {
 		return Math.abs(Utils.arc(desired, intercepted)) > 90;
 	}
 	
-	// TODO this
 	public String getStationID() {
 		return radio.getStationID();
 	}

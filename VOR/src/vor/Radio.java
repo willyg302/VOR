@@ -17,11 +17,15 @@
  */
 package vor;
 
+/**
+ * Our simulated radio. TODO everything here
+ * 
+ * @author William
+ */
 public class Radio {
 	
 	private int radial;
 	private String stationID;  // In Morse Code
-	
 
 	/* National */public Radio() {
 		this.radial = 0;
