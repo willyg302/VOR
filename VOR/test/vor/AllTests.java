@@ -31,7 +31,7 @@ import org.junit.runners.Suite.SuiteClasses;
  * @author William
  */
 @RunWith(Suite.class)
-@SuiteClasses({ ResourcesTest.class, UtilsTest.class })
+@SuiteClasses({ ResourcesTest.class, UtilsTest.class, GfxTest.class })
 public class AllTests {
 	//
 }
