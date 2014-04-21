@@ -28,10 +28,10 @@ import java.awt.image.ImageObserver;
 
 /**
  * Encapsulates a {@link Graphics2D} object for chained convenience drawing methods.
- * One should always call {@link #create()} first with an associated {@link Graphics} object.
- * After all drawing is complete, call {@link #flush()}.
+ * One should always call {@link #create(Graphics) create} first with an associated {@link Graphics} object.
+ * After all drawing is complete, call {@link #flush() flush}.
  * 
- * @author William
+ * @author William Gaul
  */
 public class Gfx {
 	

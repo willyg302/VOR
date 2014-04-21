@@ -18,18 +18,23 @@
 package vor;
 
 /**
- * Our simulated radio. TODO everything here
+ * Our simulated radio.
  * 
- * @author William
+ * @author David Do
  */
 public class Radio {
 	
 	private int radial;
-	private String stationID;  // In Morse Code
+	private String stationID;
 
 	/* National */public Radio() {
-		this.radial = 0;
-		this.stationID = "XXX";
+		this.radial = Utils.randomInt(0, 359);
+		// @William modified to use char magic
+		this.stationID = new StringBuilder()
+				.append((char)Utils.randomInt((int)'A', (int)'Z'))
+				.append((char)Utils.randomInt((int)'A', (int)'Z'))
+				.append((char)Utils.randomInt((int)'A', (int)'Z'))
+				.toString();
 	}
 	
 	public int getRadial() {
@@ -39,5 +44,9 @@ public class Radio {
 	public String getStationID() {
 		return stationID;
 	}
-
+	
+	public boolean overStation() {
+		int rand = Utils.randomInt(1, 100);
+		return (rand > 90);
+	}
 }

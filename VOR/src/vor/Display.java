@@ -53,15 +53,16 @@ public class Display extends JPanel implements KeyListener {
 		// Oddly, Swing rotates components opposite of our display rotation, so we need to do 360 - desired here
 		double wheelDegrees = 360 - vor.getOBS();
 		double obsDegrees = (3 * wheelDegrees) % 360;
+		boolean signalGood = vor.isSignalGood();
 		
 		Gfx gfx = Gfx.create(g)
 				.drawImage(this, "base", 0, 0)
 				.drawImageRotated(this, "obs", 7, 470, obsDegrees)
 				.drawImageRotated(this, "wheel", 0, 64, wheelDegrees);
-		if (vor.isSignalGood()) {
+		if (signalGood) {
 			gfx.drawImage(this, vor.isGoingTo() ? "to" : "from", 305, 299);
 		}
-		gfx.drawImage(this, vor.isSignalGood() ? "good" : "bad", 160, 309)
+		gfx.drawImage(this, signalGood ? "good" : "bad", 160, 309)
 				.drawRay(256, 192, 257, 90 + (5 * vor.getCDI() / 2), 6, Color.WHITE)
 				.drawText(this, "font", 33, 25, String.format("%03d", vor.getOBS()))
 				.drawText(this, "font", 391, 25, vor.getStationID())

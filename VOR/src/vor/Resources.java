@@ -26,7 +26,7 @@ import javax.imageio.ImageIO;
 /**
  * Maintains static HashMaps of various resources, accessible by String key.
  * 
- * @author William
+ * @author William Gaul
  */
 public class Resources {
 	private static HashMap<String, BufferedImage> images = new HashMap<>();
@@ -63,7 +63,8 @@ public class Resources {
 	}
 
 	/**
-	 * TODO Should this call loadImage() if image is not initially present?
+	 * Returns an image with the given {@code key}.
+	 * Note that the image must have been previously loaded by {@link #loadImage(String) loadImage}.
 	 * 
 	 * @param key Key of image to retrieve
 	 * @return Image if found, otherwise null

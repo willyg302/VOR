@@ -22,16 +22,24 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 /**
- * Run this class to test everything with JUnit. You can do so in two ways:
+ * Run this class to test everything with JUnit. You can do so in three ways:
  *   1. Right click AllTests.java in the Project Explorer and select Run As > 1 JUnit Test
  *   2. Alt-Shift-X, T
+ *   3. Just hit the big green play button
  * 
  * When you create a new test class, add it to the SuiteClasses decorator below.
+ * They should be ordered so that classes with dependencies are tested later.
  * 
- * @author William
+ * @author William Gaul
  */
 @RunWith(Suite.class)
-@SuiteClasses({ ResourcesTest.class, UtilsTest.class, GfxTest.class })
+@SuiteClasses({
+	ResourcesTest.class,
+	UtilsTest.class,
+	GfxTest.class,
+	RadioTest.class,
+	VORTest.class
+})
 public class AllTests {
 	//
 }

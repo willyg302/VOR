@@ -17,12 +17,11 @@
  */
 package vor;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class UtilsTest {
+public class VORTest {
 
 	@Test
 	public void testNormalizeAngle() {
@@ -47,33 +46,5 @@ public class UtilsTest {
 		assertEquals("Passing 0", 30, Utils.arc(350, 20));
 		assertEquals("Large arc", 176, Utils.arc(24, 200));
 		assertEquals("Large arc overflow", -176, Utils.arc(24, 208));
-	}
-	
-	/**
-	 * This stress-tests the {@link vor.Utils#randomInt(int, int) randomInt} function
-	 * by generating 100000 integers in the range [1, 100] and keeping track of the
-	 * lowest and highest generated values. Ideally they <i>should</i> be 1 and 100,
-	 * but it is possible to get a false negative, so as long as this test passes
-	 * most of the time it is okay.
-	 */
-	@Test
-	public void testRandomInt() {
-		int lowest = Integer.MAX_VALUE;
-		int highest = Integer.MIN_VALUE;
-		for (int i = 0; i < 100000; i++) {
-			int rand = Utils.randomInt(1, 100);
-			if (rand < lowest) {
-				lowest = rand;
-			}
-			if (rand > highest) {
-				highest = rand;
-			}
-		}
-		if (lowest != 1) {
-			fail("The lowest value should be 1, was " + lowest);
-		}
-		if (highest != 100) {
-			fail("The highest value should be 100, was " + highest);
-		}
 	}
 }

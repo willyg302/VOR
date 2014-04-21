@@ -20,7 +20,7 @@ package vor;
 /**
  * Holds public static utility methods.
  * 
- * @author William
+ * @author William Gaul
  */
 public class Utils {
 	
@@ -50,5 +50,12 @@ public class Utils {
 	 */
 	public static int arc(int x, int y) {
 		return normalizeAngle(y - x, 0);
+	}
+	
+	/**
+	 * Returns a random integer in the interval [{@code min}, {@code max}].
+	 */
+	public static int randomInt(int min, int max) {
+		return min + (int)(Math.random() * (max - min + 1));
 	}
 }

@@ -40,7 +40,7 @@ import javax.swing.KeyStroke;
 /**
  * Our desktop Java app.
  * 
- * @author William
+ * @author William Gaul
  */
 public class App {
 	public static final String APP_NAME = "VOR";

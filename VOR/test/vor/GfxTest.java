@@ -29,7 +29,7 @@ import org.junit.Test;
  * like an image to look like after calling all functions upon it. We assume
  * that if the functions work properly, they will generate a matching image.
  * 
- * @author William
+ * @author William Gaul
  */
 public class GfxTest {
 	

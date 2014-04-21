@@ -20,7 +20,7 @@ package vor;
 /**
  * Main class for VOR.
  * 
- * @author William
+ * @author William Gaul
  */
 public class VOR {
 	private Radio radio;
@@ -60,16 +60,19 @@ public class VOR {
 	}
 	
 	/**
+	 * TODO Currently this thing has a race condition where if it's called
+	 * more than once in a loop, because of overStation() it does weird things.
+	 * 
 	 * The signal is BAD if it is within 1 degree of being "abeam".
 	 * abeam is defined as 90 degrees to either side of the desired radial.
-	 * TODO The signal is also BAD if the plane is over the station.
+	 * The signal is also BAD if the plane is over the station.
 	 * 
 	 * @return true if the signal is good
 	 */
 	public boolean isSignalGood() {
 		int intercepted = radio.getRadial();
 		int arc = Utils.arc(desired, intercepted);
-		return Math.abs(Math.abs(arc) - 90) > 1;
+		return (Math.abs(Math.abs(arc) - 90) > 1) && !radio.overStation();
 	}
 	
 	/**
