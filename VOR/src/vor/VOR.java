@@ -28,9 +28,11 @@ public class VOR {
 	private int desired;
 
 	public VOR() {
-		// Simulated radio
-		radio = new Radio();
-
+		this(new Radio(true));
+	}
+	
+	public VOR(Radio radio) {
+		this.radio = radio;
 		desired = 0;
 	}
 	

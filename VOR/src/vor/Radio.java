@@ -17,6 +17,9 @@
  */
 package vor;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 /**
  * Our simulated radio.
  * 
@@ -24,16 +27,45 @@ package vor;
  */
 public class Radio {
 	
-	private int radial;
-	private String stationID;
-
+	protected int radial;
+	protected String stationID;
+	
 	/* National */public Radio() {
+		this(false);
+	}
+
+	public Radio(boolean timed) {
+		reset();
+		// TODO?
+		// It'd be nice, but we'd need the Display to listen to this class for changes.
+		/*
+		if (timed) {
+			new Timer().scheduleAtFixedRate(new TimerTask() {
+
+				@Override
+				public void run() {
+					generateRandomRadial();
+					generateRandomStationID();
+				}
+			}, 0, 10 * 1000);
+		}*/
+	}
+	
+	public void reset() {
+		generateRandomRadial();
+		generateRandomStationID();
+	}
+	
+	private void generateRandomRadial() {
 		this.radial = Utils.randomInt(0, 359);
+	}
+	
+	private void generateRandomStationID() {
 		// @William modified to use char magic
 		this.stationID = new StringBuilder()
-				.append((char)Utils.randomInt((int)'A', (int)'Z'))
-				.append((char)Utils.randomInt((int)'A', (int)'Z'))
-				.append((char)Utils.randomInt((int)'A', (int)'Z'))
+				.append((char) Utils.randomInt((int) 'A', (int) 'Z'))
+				.append((char) Utils.randomInt((int) 'A', (int) 'Z'))
+				.append((char) Utils.randomInt((int) 'A', (int) 'Z'))
 				.toString();
 	}
 	
@@ -46,7 +78,6 @@ public class Radio {
 	}
 	
 	public boolean overStation() {
-		int rand = Utils.randomInt(1, 100);
-		return (rand > 90);
+		return (Utils.randomInt(1, 10) == 10);
 	}
 }

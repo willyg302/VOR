@@ -120,7 +120,7 @@ public class App {
 					+ "by William Gaul, David Do, &amp; Landon Soriano.<br>"
 					+ "<h2>Directions:</h2>"
 					+ "Use the left and right arrow keys to set your desired radial.<br>"
-					+ "More coming soon!"
+					+ "All other information is updated from a simulated (random) radio."
 					+ "</body>");
 			textPane.setBackground(new Color(0xeeeeee));
 			textPane.setEditable(false);

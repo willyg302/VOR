@@ -22,29 +22,49 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class VORTest {
-
+	
+	/**
+	 * Performs random sanity checks on VOR functionality.
+	 */
 	@Test
-	public void testNormalizeAngle() {
-		assertEquals("Degree in range", 57, Utils.normalizeAngle(57));
-		assertEquals("Degree less than 0", 356, Utils.normalizeAngle(-4));
-		assertEquals("Degree greater than 360", 4, Utils.normalizeAngle(364));
-		assertEquals("Custom range", -168, Utils.normalizeAngle(192, 10));
+	public void testVOR() {
+		VOR vor = new VOR();
+		assertTrue("Station ID is well-formed", vor.getStationID().matches("[A-Z]{3}"));
+		
+		// TODO
+		//getCDI()
+		//isSignalGood()
+		//isGoingTo()
 	}
 	
+	/**
+	 * Stress-tests the VOR over all 360x360 possible combinations of
+	 * intercepted and desired radials.
+	 */
 	@Test
-	public void testClamp() {
-		assertEquals("Value within interval", 10, Utils.clamp(10, 5, 15));
-		assertEquals("Value below interval", -7, Utils.clamp(-15, -7, 12));
-		assertEquals("Value above interval", 42, Utils.clamp(Integer.MAX_VALUE, 0, 42));
-	}
-	
-	@Test
-	public void testArc() {
-		assertEquals("Positive arc", 35, Utils.arc(25, 60));
-		assertEquals("Negative arc", -19, Utils.arc(38, 19));
-		assertEquals("Passing 0", -26, Utils.arc(25, 359));
-		assertEquals("Passing 0", 30, Utils.arc(350, 20));
-		assertEquals("Large arc", 176, Utils.arc(24, 200));
-		assertEquals("Large arc overflow", -176, Utils.arc(24, 208));
+	public void testVORLoop() {
+		FakeRadio radio = new FakeRadio();
+		VOR vor = new VOR(radio);
+		for (int i = 0; i < 360; i++) {
+			radio.setRadial(i);
+			int abeam1 = Utils.normalizeAngle(i + 90);
+			int abeam2 = Utils.normalizeAngle(i - 90);
+			for (int j = 0; j < 360; j++) {
+				assertEquals("getOBS works", j, vor.getOBS());
+				int norm = Utils.normalizeAngle(j, i);
+				if ((norm > i - 10 && norm < i + 10) || (norm < i - 170 || norm > i + 170)) {
+					assertTrue("CDI has proper bounds", Math.abs(vor.getCDI()) < 10);
+				}
+				
+				// TODO
+				//getCDI() for all values
+				
+				if (j == abeam1 || j == abeam2) {
+					assertFalse("abeam is detected properly", vor.isSignalGood());
+				}
+				assertEquals("To/from is calculated properly", Math.abs(Utils.arc(i, j)) > 90, vor.isGoingTo());
+				vor.rotateOBS(1);
+			}
+		}
 	}
 }
