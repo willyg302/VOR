@@ -25,7 +25,7 @@ import java.awt.event.KeyListener;
 
 import javax.swing.JPanel;
 
-public class Display extends JPanel implements KeyListener {
+public class Display extends JPanel implements KeyListener, RadioListener {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -33,6 +33,7 @@ public class Display extends JPanel implements KeyListener {
 
 	public Display() {
 		vor = new VOR();
+		vor.registerRadioListener(this);
 		
 		Resources.loadImages(new String[] {"base", "obs", "wheel", "to", "from", "good", "bad", "font"});
 		
@@ -92,5 +93,10 @@ public class Display extends JPanel implements KeyListener {
 	public void onRotateOBS(int delta) {
 		vor.rotateOBS(delta);
 		this.repaint();
+	}
+
+	@Override
+	public void incomingData() {
+		this.repaint();  // New data from the radio, so let's go grab it!
 	}
 }

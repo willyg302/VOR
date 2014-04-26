@@ -17,25 +17,6 @@
  */
 package vor;
 
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-
-public class RadioTest {
-	
-	@Test
-	public void testRadio() {
-		int over = 0;
-		Radio radio = new Radio();
-		for (int i = 0; i < 1000; i++) {
-			radio.reset();
-			int radial = radio.getRadial();
-			assertTrue("Radial is within bounds", radial >= 0 && radial < 360);
-			assertTrue("Station ID is well-formed", radio.getStationID().matches("[A-Z]{3}"));
-			if (radio.isOverStation()) {
-				over++;
-			}
-		}
-		assertTrue("The over signal is given about 10% of the time", over > 80 && over < 120);
-	}
+public interface RadioListener {
+	public void incomingData();
 }

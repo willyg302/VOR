@@ -36,6 +36,10 @@ public class VOR {
 		desired = 0;
 	}
 	
+	public void registerRadioListener(RadioListener listener) {
+		radio.addListener(listener);
+	}
+	
 	public void rotateOBS(int delta) {
 		desired = Utils.normalizeAngle(desired + delta);
 	}
@@ -62,9 +66,6 @@ public class VOR {
 	}
 	
 	/**
-	 * TODO Currently this thing has a race condition where if it's called
-	 * more than once in a loop, because of overStation() it does weird things.
-	 * 
 	 * The signal is BAD if it is within 1 degree of being "abeam".
 	 * abeam is defined as 90 degrees to either side of the desired radial.
 	 * The signal is also BAD if the plane is over the station.
@@ -74,7 +75,7 @@ public class VOR {
 	public boolean isSignalGood() {
 		int intercepted = radio.getRadial();
 		int arc = Utils.arc(desired, intercepted);
-		return (Math.abs(Math.abs(arc) - 90) > 1) && !radio.overStation();
+		return (Math.abs(Math.abs(arc) - 90) > 1) && !radio.isOverStation();
 	}
 	
 	/**

@@ -28,13 +28,29 @@ public class VORTest {
 	 */
 	@Test
 	public void testVOR() {
-		VOR vor = new VOR();
+		VOR vor = new VOR(new Radio());  // We don't want to use the default timed radio
 		assertTrue("Station ID is well-formed", vor.getStationID().matches("[A-Z]{3}"));
-		
-		// TODO
-		//getCDI()
-		//isSignalGood()
-		//isGoingTo()
+		// Determine intercepted radial
+		int i = 0;
+		for (i = 0; i < 360; i++) {
+			if (vor.getCDI() == 0 && !vor.isGoingTo()) {
+				break;
+			}
+			vor.rotateOBS(1);
+		}
+		// Do one full rotation starting from intercepted radial
+		for (int j = 0; j < 360; j++) {
+			if (j < 10 || (j > 170 && j < 190) || j > 350) {
+				assertTrue("CDI has proper bounds", Math.abs(vor.getCDI()) < 10);
+			}
+			if (j == 90 || j == 270) {
+				assertFalse("abeam is detected properly", vor.isSignalGood());
+			}
+			if (j > 90 && j < 270) {
+				assertTrue("To/from is calculated properly", vor.isGoingTo());
+			}
+			vor.rotateOBS(1);
+		}
 	}
 	
 	/**
@@ -45,20 +61,27 @@ public class VORTest {
 	public void testVORLoop() {
 		FakeRadio radio = new FakeRadio();
 		VOR vor = new VOR(radio);
+		int[] cdis = new int[360];
 		for (int i = 0; i < 360; i++) {
 			radio.setRadial(i);
 			int abeam1 = Utils.normalizeAngle(i + 90);
 			int abeam2 = Utils.normalizeAngle(i - 90);
+			// Cache expected CDI values for intercepted radial i
+			int cdi = 0;
+			int x = i;
+			int step = -1;
+			for (int j = 0; j < 360; j++) {
+				cdis[x] = Utils.clamp(cdi, -10, 10);
+				if (j == 90 || j == 270) {
+					step = -step;
+				}
+				cdi += step;
+				x = Utils.normalizeAngle(x + 1);
+			}
+			// Loop over desired radial values
 			for (int j = 0; j < 360; j++) {
 				assertEquals("getOBS works", j, vor.getOBS());
-				int norm = Utils.normalizeAngle(j, i);
-				if ((norm > i - 10 && norm < i + 10) || (norm < i - 170 || norm > i + 170)) {
-					assertTrue("CDI has proper bounds", Math.abs(vor.getCDI()) < 10);
-				}
-				
-				// TODO
-				//getCDI() for all values
-				
+				assertEquals("CDI is calculated properly", cdis[j], vor.getCDI());
 				if (j == abeam1 || j == abeam2) {
 					assertFalse("abeam is detected properly", vor.isSignalGood());
 				}

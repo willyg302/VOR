@@ -17,43 +17,67 @@
  */
 package vor;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Our simulated radio.
+ * Our simulated radio. By default, a Radio instance simply encapsulates
+ * "random" values of intercepted {@code radial}, 3-letter {@code stationID},
+ * and whether the plane is {@code overStation} or not.
+ * <p>
+ * However, by calling {@code new Radio(true)}, you can get a stateful radio
+ * that updates its values every 10 seconds. It will automatically notify
+ * classes registered with {@link #addListener(RadioListener) addListener}
+ * when changes occur.
  * 
- * @author David Do
+ * @author David Do, William Gaul
  */
 public class Radio {
 	
+	private ArrayList<RadioListener> listeners;
+	
 	protected int radial;
 	protected String stationID;
+	protected boolean overStation;
 	
 	/* National */public Radio() {
 		this(false);
 	}
 
 	public Radio(boolean timed) {
+		listeners = new ArrayList<>();
 		reset();
-		// TODO?
-		// It'd be nice, but we'd need the Display to listen to this class for changes.
-		/*
 		if (timed) {
 			new Timer().scheduleAtFixedRate(new TimerTask() {
 
 				@Override
 				public void run() {
 					generateRandomRadial();
-					generateRandomStationID();
+					generateRandomOverStation();
+					
+					notifyListeners();
 				}
 			}, 0, 10 * 1000);
-		}*/
+		}
 	}
+	
+	public void addListener(RadioListener listener) {
+        listeners.add(listener);
+    }
 	
 	public void reset() {
 		generateRandomRadial();
 		generateRandomStationID();
+		generateRandomOverStation();
+		
+		notifyListeners();
+	}
+	
+	private void notifyListeners() {
+		for (RadioListener listener : listeners) {
+        	listener.incomingData();
+        }
 	}
 	
 	private void generateRandomRadial() {
@@ -69,6 +93,10 @@ public class Radio {
 				.toString();
 	}
 	
+	private void generateRandomOverStation() {
+		this.overStation = (Utils.randomInt(1, 10) == 10);
+	}
+	
 	public int getRadial() {
 		return radial;
 	}
@@ -77,7 +105,7 @@ public class Radio {
 		return stationID;
 	}
 	
-	public boolean overStation() {
-		return (Utils.randomInt(1, 10) == 10);
+	public boolean isOverStation() {
+		return overStation;
 	}
 }
