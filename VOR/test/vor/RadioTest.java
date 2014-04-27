@@ -36,6 +36,6 @@ public class RadioTest {
 				over++;
 			}
 		}
-		assertTrue("The over signal is given about 10% of the time", over > 80 && over < 120);
+		assertTrue("The over signal is given about 5% of the time", over > 30 && over < 70);
 	}
 }

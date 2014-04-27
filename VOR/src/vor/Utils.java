@@ -32,7 +32,7 @@ public class Utils {
 	}
 	
 	/**
-	 * Normalizes {@code angle} to the interval [0, 359).
+	 * Normalizes {@code angle} to the interval [0, 360).
 	 */
 	public static int normalizeAngle(int angle) {
 		return normalizeAngle(angle, 180);

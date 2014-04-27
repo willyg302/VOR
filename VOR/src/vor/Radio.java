@@ -27,9 +27,12 @@ import java.util.TimerTask;
  * and whether the plane is {@code overStation} or not.
  * <p>
  * However, by calling {@code new Radio(true)}, you can get a stateful radio
- * that updates its values every 10 seconds. It will automatically notify
+ * that updates its values every second. It will automatically notify
  * classes registered with {@link #addListener(RadioListener) addListener}
  * when changes occur.
+ * <p>
+ * The stateful radio attempts to generate "realistic" behavior by only
+ * offsetting the intercepted radial by a small random amount each time.
  * 
  * @author David Do, William Gaul
  */
@@ -53,12 +56,14 @@ public class Radio {
 
 				@Override
 				public void run() {
-					generateRandomRadial();
+					if (Utils.randomInt(0, 3) == 0) {
+						radial = Utils.normalizeAngle(radial + Utils.randomInt(-2, 2));
+					}
 					generateRandomOverStation();
 					
 					notifyListeners();
 				}
-			}, 0, 10 * 1000);
+			}, 0, 1000);
 		}
 	}
 	
@@ -94,7 +99,7 @@ public class Radio {
 	}
 	
 	private void generateRandomOverStation() {
-		this.overStation = (Utils.randomInt(1, 10) == 10);
+		this.overStation = (Utils.randomInt(0, 19) == 0);
 	}
 	
 	public int getRadial() {
