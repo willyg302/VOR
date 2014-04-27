@@ -21,6 +21,12 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+
+/**
+ * This test our radio.
+ * @author dodavid
+ *
+ */
 public class RadioTest {
 	
 	@Test
